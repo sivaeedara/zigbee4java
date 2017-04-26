@@ -87,6 +87,7 @@ public enum ZclAttributeType {
     THERMOSTAT_OCCUPIED_HEATING_SETPOINT(ZclClusterType.THERMOSTAT, 18, "OccupiedHeatingSetpoint", true, true, ZigBeeType.SignedInteger16bit, java.lang.Integer.class),
     THERMOSTAT_CONTROL_SEQUENCE_OF_OPERATION(ZclClusterType.THERMOSTAT, 27, "ControlSequenceOfOperation", true, false, ZigBeeType.Enumeration8bit, java.lang.Byte.class),
     THERMOSTAT_SYSTEM_MODE(ZclClusterType.THERMOSTAT, 28, "SystemMode", true, true, ZigBeeType.Enumeration8bit, java.lang.Byte.class),
+    THERMOSTAT_OPERATING_MODE(ZclClusterType.THERMOSTAT, 41, "OperatingMode", true, true, ZigBeeType.Enumeration8bit, java.lang.Byte.class),
     FAN_CONTROL_DESCRIPTION(ZclClusterType.FAN_CONTROL, 28, "Description", true, false, ZigBeeType.CharacterString, java.lang.String.class),
     THERMOSTAT_USER_INTERFACE_CONFIGURATION_DESCRIPTION(ZclClusterType.THERMOSTAT_USER_INTERFACE_CONFIGURATION, 28, "Description", true, false, ZigBeeType.CharacterString, java.lang.String.class),
     COLOR_CONTROL_CURRENT_HUE(ZclClusterType.COLOR_CONTROL, 0, "CurrentHue", false, false, ZigBeeType.UnsignedInteger8bit, java.lang.Integer.class),
