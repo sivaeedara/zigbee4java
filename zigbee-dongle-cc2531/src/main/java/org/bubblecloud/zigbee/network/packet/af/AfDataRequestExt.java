@@ -11,8 +11,8 @@ import org.bubblecloud.zigbee.util.Integers;
 public class AfDataRequestExt extends ZToolPacket {
 
     public AfDataRequestExt(int groupdId,
-                            short srcEndPoint, short clusterId, byte transId, byte bitmapOpt, byte radius,
-                            byte[] msg) {
+        short srcEndPoint, short clusterId, byte transId, byte bitmapOpt, byte radius,
+        byte[] msg) {
 
         if (msg.length > 230) {
             throw new IllegalArgumentException("Payload is too big, maxium is 230");
@@ -27,8 +27,9 @@ public class AfDataRequestExt extends ZToolPacket {
         framedata[5] = 0x00; // Source address
         framedata[6] = 0x00; // Source address
         framedata[7] = 0x00; // Source address
-        framedata[8] = 0x00; // Source address
-        framedata[9] = 0x00; // Destination Endpoint
+        framedata[8] = 0x00; // Source addres
+        //framedata[9] = 0x00; // Destination Endpoint
+        framedata[9] = 0xFF; // Destination Endpoint
         framedata[10] = 0x00; // Destination PAN ID
         framedata[11] = 0x00; // Destination PAN ID
         framedata[12] = srcEndPoint & 0xFF;

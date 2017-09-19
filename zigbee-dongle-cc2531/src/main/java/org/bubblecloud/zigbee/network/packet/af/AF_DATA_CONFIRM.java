@@ -1,15 +1,15 @@
 /*
    Copyright 2008-2013 CNR-ISTI, http://isti.cnr.it
-   Institute of Information Science and Technologies 
-   of the Italian National Research Council 
+   Institute of Information Science and Technologies
+   of the Italian National Research Council
 
    Copyright 2008-2013 ITACA-TSB, http://www.tsb.upv.es/
-   Instituto Tecnologico de Aplicaciones de Comunicacion 
-   Avanzadas - Grupo Tecnologias para la Salud y el 
+   Instituto Tecnologico de Aplicaciones de Comunicacion
+   Avanzadas - Grupo Tecnologias para la Salud y el
    Bienestar (TSB)
 
 
-   See the NOTICE file distributed with this work for additional 
+   See the NOTICE file distributed with this work for additional
    information regarding copyright ownership
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,12 +71,12 @@ public class AF_DATA_CONFIRM extends ZToolPacket/* implements ICONFIRMATION, IAF
     }
 
     public AF_DATA_CONFIRM(int[] framedata) {
-        profiler.debug("AF_DATA_CONFIRM: creating object");
+        // profiler.debug("AF_DATA_CONFIRM: creating object");
         this.Status = framedata[0];
         this.Endpoint = framedata[1];
         this.TransID = framedata[2];
         super.buildPacket(new DoubleByte(ZToolCMD.AF_DATA_CONFIRM), framedata);
-        profiler.debug("AF_DATA_CONFIRM: object created");
+        //  profiler.debug("AF_DATA_CONFIRM: object created");
     }
 
     public int getStatus() {
@@ -86,9 +86,9 @@ public class AF_DATA_CONFIRM extends ZToolPacket/* implements ICONFIRMATION, IAF
     @Override
     public String toString() {
         return "AF_DATA_CONFIRM{" +
-                "Endpoint=" + Endpoint +
-                ", Status=" + ResponseStatus.getStatus(Status) +
-                ", TransID=" + TransID +
-                '}';
+            "Endpoint=" + Endpoint +
+            ", Status=" + ResponseStatus.getStatus(Status) +
+            ", TransID=" + TransID +
+            '}';
     }
 }

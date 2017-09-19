@@ -59,7 +59,7 @@ public class ZclCommandTransmitter implements
 
     /**
      * Constructor for setting network manager.
-     * 
+     *
      * @param networkManager
      *            the network manager
      */
@@ -69,7 +69,7 @@ public class ZclCommandTransmitter implements
 
     /**
      * Adds command listener.
-     * 
+     *
      * @param listener
      *            the command listener
      */
@@ -83,7 +83,7 @@ public class ZclCommandTransmitter implements
 
     /**
      * Removes command listener.
-     * 
+     *
      * @param listener
      *            the command listener
      */
@@ -127,7 +127,7 @@ public class ZclCommandTransmitter implements
         if (isManufacturerExtension) {
             return false;
         }
-        
+
         final int sourceAddress = clusterMessage.getSrcAddr();
         final short sourceEndpoint = clusterMessage.getSrcEndpoint();
         final int destinationAddress = 0;
@@ -199,7 +199,7 @@ public class ZclCommandTransmitter implements
 
     /**
      * Sends command message.
-     * 
+     *
      * @param commandMessage
      *            the command message
      * @return transaction ID
@@ -248,7 +248,7 @@ public class ZclCommandTransmitter implements
             final byte afTransactionId = af.getNextTransactionId(sender);
             final byte[] msg = input.getClusterMsg();
 
-            if (commandMessage.getDestinationGroupId() == null) {
+            if (commandMessage.getDestinationGroupId() == 0) {
                 ZigBeeDeviceAddress destination = (ZigBeeDeviceAddress) commandMessage
                         .getDestinationAddress();
                 final AF_DATA_CONFIRM response = networkManager
@@ -290,7 +290,10 @@ public class ZclCommandTransmitter implements
                 commandMessage.setTransactionId(zclFrame.getHeader()
                         .getTransactionId());
                 LOGGER.debug(">>> " + commandMessage.toString());
-
+                if (response == null) {
+                    throw new ZigBeeException(
+                            "Unable to send cluster on the ZigBee network due to general error.");
+                }
                 if (response.getStatus() != 0) {
                     throw new ZigBeeException(
                             "Unable to send cluster on the ZigBee network due to: "
