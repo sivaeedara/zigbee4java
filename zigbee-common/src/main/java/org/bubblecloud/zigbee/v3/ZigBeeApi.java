@@ -573,7 +573,7 @@ public class ZigBeeApi {
      * @param command the command
      * @return the command result future
      */
-    private Future<CommandResult> send(ZigBeeAddress destination, ZclCommand command) {
+    public Future<CommandResult> send(ZigBeeAddress destination, ZclCommand command) {
         command.setDestinationAddress(destination);
         if (destination.isGroup()) {
             return broadcast(command);

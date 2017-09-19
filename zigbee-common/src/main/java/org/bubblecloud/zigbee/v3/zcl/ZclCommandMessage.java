@@ -196,7 +196,8 @@ public class ZclCommandMessage {
         StringBuilder sb = new StringBuilder();
         if (resolvedClusterId == null && type != null) {
             resolvedClusterId = type.getClusterType().getId();
-
+        }
+        if (resolvedClusterId != null) {
             sb.append(ZclClusterType.getValueById(resolvedClusterId).getLabel()
                     + " - " + type + " ");
         } else {
