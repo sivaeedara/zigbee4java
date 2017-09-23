@@ -153,6 +153,19 @@ public class ZigBeeApi {
         }
     }
 
+    public Future<CommandResult> addLocalGroup(final int groupId, final String label,final int endpointId){
+        if (networkState.getGroup(groupId) == null) {
+            networkState.addGroup(new ZigBeeGroupAddress(groupId, label));
+        } else {
+            final ZigBeeGroupAddress group = networkState.getGroup(groupId);
+            group.setLabel(label);
+            networkState.updateGroup(group);
+        }
+        final AddLocalGroup command = new AddLocalGroup(groupId,label,endpointId);
+
+        return unicast(command);
+    }
+
     /**
      * Removes group label.
      * @param groupId the group ID
@@ -232,6 +245,10 @@ public class ZigBeeApi {
         return unicast(command);
     }
 
+    public Future<CommandResult> managementBindRequest(final int networkAddress)  {
+       final ManagementBindRequest command = new ManagementBindRequest(networkAddress,0);
+        return unicast(command);
+    }
     /**
      * Unbinds two devices.
      * @param source the source device

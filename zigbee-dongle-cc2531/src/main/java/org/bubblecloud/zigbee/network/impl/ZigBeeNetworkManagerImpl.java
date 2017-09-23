@@ -277,6 +277,8 @@ public class ZigBeeNetworkManagerImpl implements ZigBeeNetworkManager {
             shutdown();
             return false;
         }
+
+        disableMulticast();
         return true;
     }
 
@@ -873,7 +875,19 @@ public class ZigBeeNetworkManagerImpl implements ZigBeeNetworkManager {
 
         return response != null;
     }
-    
+
+    private boolean disableMulticast() {
+        try {
+            commandInterface.sendPacket(new ZDO_EXT_SET_PARAMS());
+        } catch (IOException e) {
+            logger.error("Failed to disable multicast", e);
+            return false;
+        }
+        logger.info("Disabled the use of multicast for group functionality");
+        return true;
+    }
+
+
     private boolean dongleReset() {
         final BlockingCommandReceiver waiter = new BlockingCommandReceiver(
                 ZToolCMD.SYS_RESET_RESPONSE,
@@ -1200,12 +1214,65 @@ public class ZigBeeNetworkManagerImpl implements ZigBeeNetworkManager {
         return result;
     }
 
+    /**
+     * For Group requests you may not get any response.
+     * @param request
+     * @return
+     */
     public AfDataSrspExt sendAFDataRequestExt(AfDataRequestExt request) {
         if (!waitForNetwork()) {
             return null;
         }
-        AfDataSrspExt response = (AfDataSrspExt) sendSynchrouns(commandInterface, request);
-        return response;
+
+        final ZToolPacket[] response = new ZToolPacket[]{null};
+
+        logger.trace("{} sending as synchronous command.", request.getClass().getSimpleName());
+
+        SynchronousCommandListener listener = new SynchronousCommandListener() {
+
+            public void receivedCommandResponse(ZToolPacket packet) {
+                logger.trace(" {} received as synchronous command.", packet.getClass().getSimpleName());
+                synchronized (response) {
+                    // Do not set response[0] again.
+                    response[0] = packet;
+                    response.notify();
+                }
+            }
+        };
+
+                try {
+                    commandInterface.sendSynchronousCommand(request, listener,TIMEOUT);
+                } catch (IOException e) {
+                    logger.error("Synchronous command send failed due to IO exception. ", e);
+                } catch (Exception ex) {
+                    logger.error("Synchronous command send failed due to unexpected exception.", ex);
+                }
+                synchronized (response) {
+                    long wakeUpTime = System.currentTimeMillis() + TIMEOUT;
+                    while (response[0] == null && wakeUpTime > System.currentTimeMillis()) {
+                        final long sleeping = wakeUpTime - System.currentTimeMillis();
+                        logger.trace("Waiting for synchronous command up to {}ms till {} Unixtime", sleeping, wakeUpTime);
+                        if (sleeping <= 0) {
+                            break;
+                        }
+                        try {
+                            response.wait(sleeping);
+                        } catch (InterruptedException ignored) {
+                        }
+                    }
+                }
+                if (response[0] != null) {
+                    logger.trace("{} -> {}",
+                            request.getClass().getSimpleName(), response[0].getClass().getSimpleName());
+                    return (AfDataSrspExt) response[0];
+                } else {
+                    logger.warn("{} executed and timed out while waiting for response.",
+                            request.getClass().getSimpleName());
+
+                }
+
+        return null;
+
     }
 
     public ZDO_BIND_RSP sendZDOBind(ZDO_BIND_REQ request) {

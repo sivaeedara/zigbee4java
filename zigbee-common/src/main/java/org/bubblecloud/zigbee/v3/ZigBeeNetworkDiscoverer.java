@@ -118,7 +118,7 @@ public class ZigBeeNetworkDiscoverer implements CommandListener {
                     }
 
                 }catch (Exception e){
-                    LOGGER.warn("Exeception when discovering devices: Will retry after 30 secs");
+                    LOGGER.warn("Exception when discovering devices: Will retry after 30 secs",e);
                 }
 
             }
@@ -258,18 +258,9 @@ public class ZigBeeNetworkDiscoverer implements CommandListener {
         // 0. Node has been announced.
         if (command instanceof DeviceAnnounce) {
             final DeviceAnnounce deviceAnnounce = (DeviceAnnounce) command;
-            boolean isNewDevice = true;
-
-            for(ZigBeeDevice device:networkState.getDevices()){
-                if(device.getNetworkAddress() == deviceAnnounce.getNetworkAddress()){
-                    isNewDevice =false;
-                    break;
-                }
-            }
-            if (isNewDevice) {
                 requestNodeIeeeAddressAndAssociatedNodes(deviceAnnounce
                     .getNetworkAddress());
-            }
+
         }
 
         // 1. Node IEEE address and associated nodes have been received.

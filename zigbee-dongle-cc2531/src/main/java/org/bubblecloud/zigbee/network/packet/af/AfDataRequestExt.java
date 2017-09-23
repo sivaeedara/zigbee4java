@@ -27,8 +27,7 @@ public class AfDataRequestExt extends ZToolPacket {
         framedata[5] = 0x00; // Source address
         framedata[6] = 0x00; // Source address
         framedata[7] = 0x00; // Source address
-        framedata[8] = 0x00; // Source addres
-        //framedata[9] = 0x00; // Destination Endpoint
+        framedata[8] = 0x00; // Source address
         framedata[9] = 0xFF; // Destination Endpoint
         framedata[10] = 0x00; // Destination PAN ID
         framedata[11] = 0x00; // Destination PAN ID

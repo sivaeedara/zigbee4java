@@ -167,6 +167,14 @@ public class ZdoCommandTransmitter implements AsynchronousCommandListener {
                     characters
                 ));
             }
+            if (command instanceof AddLocalGroup) {
+                final AddLocalGroup addLocalGroup = (AddLocalGroup) command;
+                networkManager.sendCommand(new ZDO_EXT_ADD_GROUP(
+                        addLocalGroup.getGroupId(),
+                        addLocalGroup.getGroupName(),
+                       addLocalGroup.getEndPointId()
+                ));
+            }
             if (command instanceof UserDescriptorRequest) {
                 final UserDescriptorRequest userDescriptorRequest = (UserDescriptorRequest) command;
                 networkManager.sendCommand(new ZDO_USER_DESC_REQ(
@@ -178,6 +186,13 @@ public class ZdoCommandTransmitter implements AsynchronousCommandListener {
                 networkManager.sendCommand(new ZDO_MGMT_LQI_REQ(
                     getZToolAddress16(managementLqiRequest.getNetworkAddress()),
                     managementLqiRequest.getStartIndex()
+                ));
+            }
+            if (command instanceof ManagementBindRequest) {
+                final ManagementBindRequest managementBindRequest = (ManagementBindRequest) command;
+                networkManager.sendCommand(new ZDO_MGMT_BIND_REQ(
+                        getZToolAddress16(managementBindRequest.getNetworkAddress()),
+                        managementBindRequest.getStartIndex()
                 ));
             }
         }
@@ -392,6 +407,17 @@ public class ZdoCommandTransmitter implements AsynchronousCommandListener {
             );
 
             notifyCommandReceived(command);
+
+            return;
+        }
+
+        if (packet.getCMD().get16BitValue() == ZToolCMD.ZDO_MGMT_BIND_RSP) {
+            final ZDO_MGMT_BIND_RSP message = (ZDO_MGMT_BIND_RSP) packet;
+
+            final ZDO_MGMT_BIND_RSP.BindingTableListItemClass[] bindingItems = message.getBindingTableList();
+             for (int i = 0; i < bindingItems.length; i++) {
+                LOGGER.info("bind resp", bindingItems[i].toString());
+            }
 
             return;
         }

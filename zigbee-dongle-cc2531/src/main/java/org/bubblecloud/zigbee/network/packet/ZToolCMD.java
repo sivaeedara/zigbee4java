@@ -944,6 +944,10 @@ public class ZToolCMD {
 	 * Request.
 	 */
 	public static final int ZDO_SIMPLE_DESC_RSP = 0x4584;
+
+	public static final int ZDO_EXT_ADD_GROUP = 0x254B;
+
+	public static final int ZDO_EXT_SET_PARAMS = 0x2553;
 	/**
 	 * In the case where compiler flag HOLD_AUTO_START is defined by default;
 	 * device will start from HOLD state. Issuing this command will trigger the

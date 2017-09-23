@@ -349,6 +349,10 @@ public class ZToolPacketStream
                 return new UTIL_SET_CHANNELS_RESPONSE(payload);
             case ZToolCMD.UTIL_GET_DEVICE_INFO_RESPONSE:
                 return new UTIL_GET_DEVICE_INFO_RESPONSE(payload);
+            case ZToolCMD.ZDO_MGMT_BIND_RSP:
+                return new ZDO_MGMT_BIND_RSP(payload);
+            case ZToolCMD.ZDO_MGMT_BIND_REQ_SRSP:
+                return new ZDO_MGMT_BIND_REQ_SRSP(payload);
             default:
                 log.warn("Unknown command ID: 0x" + Integer.toHexString(cmdId.get16BitValue()));
                 return new ZToolPacket(cmdId, payload);
